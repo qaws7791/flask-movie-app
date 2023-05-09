@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>영화 추천 서비스</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap");
+
+      *,
+      html,
+      body {
+        font-family: "Noto Sans KR", sans-serif;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        color: #202123;
+      }
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      a {
+        text-decoration: none;
+      }
+      .container {
+        width: 100%;
+        max-width: 1230px;
+        height: 100%;
+        margin: 0 auto;
+        padding: 0 15px;
+        background-color: aliceblue;
+      }
+      .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .header-title {
+        margin-bottom: 20px;
+      }
+
+      #input-title {
+        padding: 10px;
+        line-height: 1.5;
+        font-size: 24px;
+        border-radius: 5px;
+        outline: none;
+        border: 2px solid #d2d2d2;
+      }
+      #input-title:focus,
+      #input-title:hover {
+        border: 2px solid #1568ff;
+      }
+      #movie-list {
+        list-style-type: none;
+        max-height: 500px;
+        overflow: hidden;
+        overflow-y: auto;
+        border: 2px solid #d2d2d2;
+        border-radius: 5px;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        display: none;
+        position: absolute;
+        background-color: white;
+        z-index: 100;
+      }
+      .movie-item {
+        width: 100%;
+      }
+      .movie-item:hover {
+        background-color: #eeeeee;
+      }
+      .movie-item > a {
+        color: #202123;
+        display: flex;
+        padding: 10px;
+
+        cursor: pointer;
+      }
+      .movie-item:not(:last-child) {
+        box-shadow: 0px 1px 0px 0px #ccc;
+      }
+      .movie-item img {
+        margin-right: 10px;
+        border-radius: 4px;
+      }
+
+      #input-image-display {
+        width: 200px;
+      }
+
+      .input-from {
+        width: 500px;
+        position: relative;
+      }
+
+      .input-from > input {
+        width: 100%;
+      }
+      .main {
+        margin-top: 60px;
+      }
+
+      .main-title {
+        text-align: center;
+      }
+
+      .comment-list {
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-around;
+        gap: 10px;
+      }
+
+      .comment-item {
+        flex: 1;
+        list-style: none;
+        border: 1px solid rgb(212, 212, 212);
+        border-radius: 10px;
+        overflow: hidden;
+        max-width: 280px;
+        background-color: white;
+        min-width: 150px;
+      }
+
+      .comment-item:hover {
+        transform: scale(1.05);
+      }
+      .comment-item > a {
+        display: inline-block;
+        width: 100%;
+      }
+      .comment-item a img {
+        width: 100%;
+      }
+
+      .comment-title {
+        color: #202123;
+        font-size: 16px;
+      }
+      .comment-title:hover {
+        text-decoration: underline;
+      }
+      .comment-content {
+        padding: 20px;
+      }
+      .comment-rating {
+        margin-top: 6px;
+      }
+      .comment-desc {
+        font-size: 14px;
+        margin-top: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+      }
+      .comment-btns {
+        display: flex;
+        margin-top: 10px;
+      }
+      .btn {
+        padding: 0.7rem 1.4rem;
+        background-color: #1568ff;
+        color: white;
+        border-radius: 14px;
+      }
+      .btn:hover {
+        cursor: pointer;
+        background-color: #125be0;
+      }
+
+      .comment-genres {
+        margin-top: 10px;
+        line-height: 1.5;
+      }
+
+      .comment-genre {
+        font-size: 13px;
+        border: 1px solid rgb(123, 193, 255);
+        border-radius: 20px;
+        color: rgb(123, 193, 255);
+        padding: 0px 4px;
+        margin-bottom: 4px;
+        display: inline-block;
+      }
+      .comment-genre:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      @media (max-width: 800px) {
+        .comment-list {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          justify-items: center;
+        }
+        .comment-item {
+          margin-bottom: 20px;
+          max-width: 300px;
+        }
+        .input-from {
+          width: 100%;
+        }
+      }
+      @media (max-width: 600px) {
+        .comment-list {
+          grid-template-columns: repeat(1, 1fr);
+        }
+        .comment-item {
+          max-width: 500px;
+        }
+        .comment-btns {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1 class="header-title">영화 추천 서비스</h1>
+        <div class="input-from" id="input-form">
+          <input
+            type="text"
+            id="input-title"
+            name="name"
+            required
+            minlength="2"
+            maxlength="10"
+            size="10"
+            placeholder="영화를 검색하세요"
+          />
+          <ul id="movie-list"></ul>
+        </div>
+      </header>
+      <main class="main">
+        <h2 class="main-title">코멘트 리스트</h2>
+        <ul class="comment-list">
+          <li class="comment-item">
+            <a href="/movie/502356">
+              <img
+                src="https://image.tmdb.org/t/p/original/dlGyzCxbBQK1U2O5o31Z1hB6erc.jpg"
+              />
+            </a>
+            <div class="comment-content">
+              <a href="/movie/502356">
+                <h5 class="comment-title">슈퍼 마리오 브라더스</h5>
+              </a>
+              <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+              <p class="comment-desc">
+                따단-딴-따단-딴 ♫ 전 세계를 열광시킬 올 타임 슈퍼 어드벤처의
+                등장! 뉴욕의 평범한 배관공 형제 '마리오'와 ‘루이지’는 배수관
+                고장으로 위기에 빠진 도시를 구하려다 미스터리한 초록색 파이프
+                안으로 빨려 들어가게 된다.
+              </p>
+              <div class="comment-genres">
+                <span class="comment-genre">애니메이션</span>
+                <span class="comment-genre">모험</span>
+                <span class="comment-genre">가족</span>
+                <span class="comment-genre">판타지</span>
+                <span class="comment-genre">코미디</span>
+              </div>
+              <!-- <div class="comment-btns">
+                <a href="/movie/502356" class="btn">이동</a>
+              </div> -->
+            </div>
+          </li>
+          <li class="comment-item">
+            <a href="/movie/502356">
+              <img
+                src="https://image.tmdb.org/t/p/original/dlGyzCxbBQK1U2O5o31Z1hB6erc.jpg"
+              />
+            </a>
+            <div class="comment-content">
+              <a href="/movie/502356">
+                <h5 class="comment-title">슈퍼 마리오 브라더스</h5>
+              </a>
+              <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+              <p class="comment-desc">
+                따단-딴-따단-딴 ♫ 전 세계를 열광시킬 올 타임 슈퍼 어드벤처의
+                등장! 뉴욕의 평범한 배관공 형제 '마리오'와 ‘루이지’는 배수관
+                고장으로 위기에 빠진 도시를 구하려다 미스터리한 초록색 파이프
+                안으로 빨려 들어가게 된다.
+              </p>
+              <div class="comment-genres">
+                <span class="comment-genre">애니메이션</span>
+                <span class="comment-genre">모험</span>
+                <span class="comment-genre">가족</span>
+                <span class="comment-genre">판타지</span>
+                <span class="comment-genre">코미디</span>
+              </div>
+              <!-- <div class="comment-btns">
+                <a href="/movie/502356" class="btn">이동</a>
+              </div> -->
+            </div>
+          </li>
+          <li class="comment-item">
+            <a href="/movie/502356">
+              <img
+                src="https://image.tmdb.org/t/p/original/dlGyzCxbBQK1U2O5o31Z1hB6erc.jpg"
+              />
+            </a>
+            <div class="comment-content">
+              <a href="/movie/502356">
+                <h5 class="comment-title">슈퍼 마리오 브라더스</h5>
+              </a>
+              <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+              <p class="comment-desc">
+                따단-딴-따단-딴 ♫ 전 세계를 열광시킬 올 타임 슈퍼 어드벤처의
+                등장! 뉴욕의 평범한 배관공 형제 '마리오'와 ‘루이지’는 배수관
+                고장으로 위기에 빠진 도시를 구하려다 미스터리한 초록색 파이프
+                안으로 빨려 들어가게 된다.
+              </p>
+              <div class="comment-genres">
+                <span class="comment-genre">애니메이션</span>
+                <span class="comment-genre">모험</span>
+                <span class="comment-genre">가족</span>
+                <span class="comment-genre">판타지</span>
+                <span class="comment-genre">코미디</span>
+              </div>
+              <!-- <div class="comment-btns">
+                <a href="/movie/502356" class="btn">이동</a>
+              </div> -->
+            </div>
+          </li>
+          <li class="comment-item">
+            <a href="/movie/502356">
+              <img
+                src="https://image.tmdb.org/t/p/original/dlGyzCxbBQK1U2O5o31Z1hB6erc.jpg"
+              />
+            </a>
+            <div class="comment-content">
+              <a href="/movie/502356">
+                <h5 class="comment-title">슈퍼 마리오 브라더스</h5>
+              </a>
+              <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+              <p class="comment-desc">
+                따단-딴-따단-딴 ♫ 전 세계를 열광시킬 올 타임 슈퍼 어드벤처의
+                등장! 뉴욕의 평범한 배관공 형제 '마리오'와 ‘루이지’는 배수관
+                고장으로 위기에 빠진 도시를 구하려다 미스터리한 초록색 파이프
+                안으로 빨려 들어가게 된다.
+              </p>
+              <div class="comment-genres">
+                <span class="comment-genre">애니메이션</span>
+                <span class="comment-genre">모험</span>
+                <span class="comment-genre">가족</span>
+                <span class="comment-genre">판타지</span>
+                <span class="comment-genre">코미디</span>
+              </div>
+              <!-- <div class="comment-btns">
+                <a href="/movie/502356" class="btn">이동</a>
+              </div> -->
+            </div>
+          </li>
+        </ul>
+      </main>
+    </div>
+    <script>
+      // 상수 //
+      const params = {
+        api_key: "08d7470a24ff85105a87a6bbdb74f099",
+        language: "ko-Kr",
+        page: "1",
+        include_adult: "false",
+        query: "",
+      };
+      const list = document.getElementById("movie-list");
+      const url = "https://api.themoviedb.org/3/search/movie";
+      const input = document.getElementById("input-form");
+
+      // 이벤트 //
+
+      document
+        .querySelector("#input-title")
+        .addEventListener("input", async (e) => {
+          const results = await fetchMoviesData(e);
+          setMovieList(results);
+        });
+
+      window.onload = (event) => {
+        document.getElementById("input-title").focus();
+      };
+
+      input.addEventListener("input", function (e) {
+        if (e.target.value) {
+          list.style.display = "block";
+        } else {
+          list.style.display = "none";
+        }
+      });
+
+      input.addEventListener("focusin", function (e) {
+        if (e.target.value) {
+          list.style.display = "block";
+        }
+      });
+      document.addEventListener("click", function (e) {
+        if (hasFocus(input)) {
+        } else {
+          list.style.display = "none";
+        }
+      });
+
+      // 함수 //
+
+      function hasFocus(element) {
+        if (element === document.activeElement) {
+          return true;
+        }
+
+        const children = element.children;
+        for (let i = 0; i < children.length; i++) {
+          if (hasFocus(children[i])) {
+            return true;
+          }
+        }
+
+        return false;
+      }
+
+      function createMovieItem(movie) {
+        const newItem = document.createElement("li");
+        newItem.classList.add("movie-item");
+        const link = document.createElement("a");
+        const content = document.createElement("div");
+        const title = document.createElement("p");
+        const date = document.createElement("p");
+        link.href = `/movie/${movie.id}`;
+        title.innerText = `${movie.title}(${movie.id})`;
+        date.innerText = movie.release_date || "";
+        if (movie.poster_path) {
+          const newImage = new Image(50);
+          newImage.src =
+            "https://image.tmdb.org/t/p/w92" + movie.poster_path ||
+            movie.backdrop_path;
+          newImage.alt = movie.title;
+          newImage.onerror = function (e) {
+            this.src = "{{url_for('static',filename='img/no-image.png')}}";
+          };
+          link.appendChild(newImage);
+        }
+        content.appendChild(title);
+        content.appendChild(date);
+        newItem.addEventListener("click", function handleClick(e) {
+          console.log("클릭");
+          document.getElementById("input-title").value = movie.title;
+          document.getElementById("input-title").focus();
+        });
+        link.appendChild(content);
+        newItem.appendChild(link);
+        return newItem;
+      }
+
+      function setMovieList(movieList) {
+        if (movieList) {
+          list.textContent = "";
+          movieList.forEach((movie) => {
+            list.appendChild(createMovieItem(movie));
+          });
+        }
+      }
+
+      async function fetchMoviesData(e) {
+        const URLparams = new URLSearchParams({
+          ...params,
+          query: e.target.value,
+        });
+        try {
+          const response = await fetch(url + "?" + URLparams);
+          const json = await response.json();
+          console.log(json);
+          return json.results.slice(0, 5);
+        } catch (error) {
+          console.log("fetch error: ", error);
+        }
+      }
+    </script>
+  </body>
+</html>

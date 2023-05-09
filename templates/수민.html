@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>코멘트 페이지</title>
+
+    <style>
+      @font-face {
+        font-family: "SUITE-Regular";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2")
+          format("woff2");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      * {
+        font-family: "SUITE-Regular";
+      }
+
+      .title {
+        color: white;
+
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        background-image: linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.5),
+            rgba(0, 0, 0, 0.5)
+          ),
+          url("https://movie-phinf.pstatic.net/20210715_95/1626338192428gTnJl_JPEG/movie_image.jpg");
+        background-position: center;
+        background-size: cover;
+      }
+
+      .comment {
+        height: 780px;
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 10px;
+        margin: 50px auto 0px auto;
+        box-shadow: 0px 0px 3px 0px gray;
+      }
+
+      .image {
+        background-color: darkseagreen;
+        width: 300px;
+        height: 390px;
+        margin: 10px 0px 20px 0px;
+        box-shadow: 0px 0px 3px 0px gray;
+      }
+
+      .form-floating {
+        width: 75%;
+      }
+
+      .comment > button {
+        margin: 10px 0px 0px 243px;
+      }
+
+      .comments {
+        margin: 50px auto 0px auto;
+        width: 50%;
+        max-width: 1200px;
+      }
+
+      .blockquote-footer {
+        margin-top: 10px;
+      }
+
+      .card {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="comment-page">
+      <h1 class="title">영화 추천 서비스</h1>
+      <div class="comment">
+        <img
+          class="image"
+          src="https://img1.daumcdn.net/thumb/C408x596/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fmovie%2F6b0eb68a4c944965ae78c83112bbb799c25b876b"
+        />
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="name" placeholder="url" />
+          <label for="floatingInput">닉네임</label>
+        </div>
+        <div class="input-group mb-3 w-75">
+          <label class="input-group-text" for="inputGroupSelect01">별점</label>
+          <select class="form-select" id="star">
+            <option selected>-- 선택하기 --</option>
+            <option value="1">⭐</option>
+            <option value="2">⭐⭐</option>
+            <option value="3">⭐⭐⭐</option>
+            <option value="4">⭐⭐⭐⭐</option>
+            <option value="5">⭐⭐⭐⭐⭐</option>
+          </select>
+        </div>
+        <div class="form-floating">
+          <textarea
+            class="form-control"
+            placeholder="Leave a comment here"
+            id="floatingTextarea2"
+            style="height: 150px"
+          ></textarea>
+          <label for="floatingTextarea2">코멘트를 입력하세요.</label>
+        </div>
+        <button type="button" class="btn btn-outline-dark">확인</button>
+      </div>
+      <div class="comments">
+        <div class="mycards" id="comment-list">
+          <div class="card">
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p>최고의 영화!</p>
+                <p>⭐⭐⭐</p>
+                <footer class="blockquote-footer">호빵맨</footer>
+              </blockquote>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p>최고의 영화!</p>
+                <p>⭐⭐⭐</p>
+                <footer class="blockquote-footer">호빵맨</footer>
+              </blockquote>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p>최고의 영화!</p>
+                <p>⭐⭐⭐</p>
+                <footer class="blockquote-footer">호빵맨</footer>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
