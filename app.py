@@ -17,7 +17,7 @@ def bucket_get():
 
 @app.route('/movie/<int:id>')
 def movie(id):
-    return render_template('movie.html',id=id)
+    return render_template('수민.html',id=id)
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5050, debug=True)

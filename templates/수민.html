@@ -35,7 +35,6 @@
 
       .title {
         color: white;
-
         height: 200px;
         display: flex;
         flex-direction: column;
@@ -99,9 +98,10 @@
 
   <body>
     <div class="comment-page">
-      <h1 class="title">영화 추천 서비스</h1>
+      <h1 class="title" id="title">영화 추천 서비스</h1>
       <div class="comment">
         <img
+          id="input-image"
           class="image"
           src="https://img1.daumcdn.net/thumb/C408x596/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fmovie%2F6b0eb68a4c944965ae78c83112bbb799c25b876b"
         />
@@ -163,5 +163,44 @@
         </div>
       </div>
     </div>
+    <script>
+      const params = {
+        api_key: "08d7470a24ff85105a87a6bbdb74f099",
+        language: "ko-Kr",
+      };
+      const url = "https://api.themoviedb.org/3/movie/" + "{{id}}";
+      const title = document.getElementById("title");
+      const movieImg = document.getElementById("movie-img");
+      const inputImage = document.getElementById("input-image");
+      console.log(url);
+      function setMovie(movie) {
+        title.innerText = movie.title;
+        title.style.backgroundImage = `url("https://image.tmdb.org/t/p/original${movie["backdrop_path"]}")`;
+        console.log(title.style.backgroundImage);
+        inputImage.src =
+          "https://image.tmdb.org/t/p/original" + movie.poster_path;
+      }
+
+      async function fetchData(e) {
+        const URLparams = new URLSearchParams({
+          ...params,
+        });
+        try {
+          console.log("start");
+          const response = await fetch(url + "?" + URLparams);
+          const json = await response.json();
+          console.log(json);
+          setMovie(json);
+          return json;
+        } catch (error) {
+          console.log("fetch error: ", error);
+        }
+      }
+
+      window.onload = function () {
+        console.log("onload");
+        fetchData();
+      };
+    </script>
   </body>
 </html>
