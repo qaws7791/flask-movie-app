@@ -5,6 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>영화 추천 서비스</title>
+    <!-- Link Swiper's CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap");
 
@@ -29,10 +34,12 @@
         max-width: 1230px;
         height: 100%;
         margin: 0 auto;
-        padding: 0 15px;
+
         background-color: aliceblue;
       }
       .header {
+        padding: 80px 0;
+        background-color: #94cdff;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -42,6 +49,7 @@
       }
 
       #input-title {
+        text-indent: 10px;
         padding: 10px;
         line-height: 1.5;
         font-size: 24px;
@@ -103,6 +111,8 @@
       }
       .main {
         margin-top: 60px;
+        width: 100%;
+        padding: 0 15px;
       }
 
       .main-title {
@@ -110,7 +120,7 @@
       }
 
       .comment-list {
-        margin-top: 40px;
+        margin: 40px 0px;
         display: flex;
         justify-content: space-around;
         gap: 10px;
@@ -122,9 +132,13 @@
         border: 1px solid rgb(212, 212, 212);
         border-radius: 10px;
         overflow: hidden;
-        max-width: 280px;
+        max-width: 240px;
         background-color: white;
-        min-width: 150px;
+        position: relative;
+        box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px,
+          rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+        transform: translateZ(0);
+        font-size: 0px;
       }
 
       .comment-item:hover {
@@ -136,6 +150,7 @@
       }
       .comment-item a img {
         width: 100%;
+        height: auto;
       }
 
       .comment-title {
@@ -150,6 +165,7 @@
       }
       .comment-rating {
         margin-top: 6px;
+        font-size: 12px;
       }
       .comment-desc {
         font-size: 14px;
@@ -179,20 +195,72 @@
         margin-top: 10px;
         line-height: 1.5;
       }
-
       .comment-genre {
         font-size: 13px;
         border: 1px solid rgb(123, 193, 255);
         border-radius: 20px;
         color: rgb(123, 193, 255);
         padding: 0px 4px;
-        margin-bottom: 4px;
+        margin: 0 4px 4px 0;
         display: inline-block;
       }
-      .comment-genre:hover {
+
+      .comment-genre > a {
+        color: inherit;
+      }
+      .comment-genre > a:hover {
         text-decoration: underline;
         cursor: pointer;
       }
+
+      /* swiper */
+      .swiper-section {
+        position: relative;
+      }
+      .movie-swiper {
+        box-sizing: border-box;
+        position: relative;
+        padding: 20px 50px;
+        overflow: hidden;
+      }
+      .swiper {
+        width: 100%;
+        height: 100%;
+        overflow: initial;
+        padding: 20px;
+      }
+      .swiper-slide {
+        display: flex;
+        align-items: center;
+      }
+      .overflow-wrapper {
+        padding: 10px;
+        overflow: hidden;
+      }
+
+      .append-buttons {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .append-buttons button {
+        display: inline-block;
+        cursor: pointer;
+        border: 1px solid #007aff;
+        color: #007aff;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 4px;
+        margin: 0 10px;
+        font-size: 13px;
+      }
+
+      .swiper-pagination-bullets.swiper-pagination-horizontal {
+        bottom: var(--swiper-pagination-bottom, 20px);
+      }
+
+      /*media*/
+
       @media (max-width: 800px) {
         .comment-list {
           display: grid;
@@ -215,6 +283,14 @@
           max-width: 500px;
         }
         .comment-btns {
+          display: none;
+        }
+        .movie-swiper {
+          padding: 10px 20px;
+        }
+        .swiper-button-next,
+        .swiper-button-prev,
+        .swiper-pagination {
           display: none;
         }
       }
@@ -259,11 +335,21 @@
                 안으로 빨려 들어가게 된다.
               </p>
               <div class="comment-genres">
-                <span class="comment-genre">애니메이션</span>
-                <span class="comment-genre">모험</span>
-                <span class="comment-genre">가족</span>
-                <span class="comment-genre">판타지</span>
-                <span class="comment-genre">코미디</span>
+                <span class="comment-genre">
+                  <a href="/genre/16">애니메이션</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/12">모험</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/10751">가족</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/14">판타지</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/35">코미디</a>
+                </span>
               </div>
               <!-- <div class="comment-btns">
                 <a href="/movie/502356" class="btn">이동</a>
@@ -288,11 +374,21 @@
                 안으로 빨려 들어가게 된다.
               </p>
               <div class="comment-genres">
-                <span class="comment-genre">애니메이션</span>
-                <span class="comment-genre">모험</span>
-                <span class="comment-genre">가족</span>
-                <span class="comment-genre">판타지</span>
-                <span class="comment-genre">코미디</span>
+                <span class="comment-genre">
+                  <a href="/genre/16">애니메이션</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/12">모험</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/10751">가족</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/14">판타지</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/35">코미디</a>
+                </span>
               </div>
               <!-- <div class="comment-btns">
                 <a href="/movie/502356" class="btn">이동</a>
@@ -317,11 +413,21 @@
                 안으로 빨려 들어가게 된다.
               </p>
               <div class="comment-genres">
-                <span class="comment-genre">애니메이션</span>
-                <span class="comment-genre">모험</span>
-                <span class="comment-genre">가족</span>
-                <span class="comment-genre">판타지</span>
-                <span class="comment-genre">코미디</span>
+                <span class="comment-genre">
+                  <a href="/genre/16">애니메이션</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/12">모험</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/10751">가족</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/14">판타지</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/35">코미디</a>
+                </span>
               </div>
               <!-- <div class="comment-btns">
                 <a href="/movie/502356" class="btn">이동</a>
@@ -346,11 +452,21 @@
                 안으로 빨려 들어가게 된다.
               </p>
               <div class="comment-genres">
-                <span class="comment-genre">애니메이션</span>
-                <span class="comment-genre">모험</span>
-                <span class="comment-genre">가족</span>
-                <span class="comment-genre">판타지</span>
-                <span class="comment-genre">코미디</span>
+                <span class="comment-genre">
+                  <a href="/genre/16">애니메이션</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/12">모험</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/10751">가족</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/14">판타지</a>
+                </span>
+                <span class="comment-genre">
+                  <a href="/genre/35">코미디</a>
+                </span>
               </div>
               <!-- <div class="comment-btns">
                 <a href="/movie/502356" class="btn">이동</a>
@@ -358,6 +474,360 @@
             </div>
           </li>
         </ul>
+        <h2 class="main-title">액션 영화</h2>
+        <section class="swiper-section">
+          <div class="movie-swiper">
+            <div class="overflow-wrapper">
+              <div #swiperRef="" class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <li class="comment-item">
+                      <a href="/movie/447365">
+                        <img
+                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                        />
+                      </a>
+                      <div class="comment-content">
+                        <a href="/movie/447365">
+                          <h5 class="comment-title">
+                            가디언즈 오브 갤럭시: Volume 3
+                          </h5>
+                        </a>
+                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="comment-desc">
+                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
+                          모르는 미션에 나서는 이야기.
+                        </p>
+                        <div class="comment-genres">
+                          <span class="comment-genre"
+                            ><a href="/genre/878">SF</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/12">모험</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/28">액션</a></span
+                          >
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="comment-item">
+                      <a href="/movie/447365">
+                        <img
+                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                        />
+                      </a>
+                      <div class="comment-content">
+                        <a href="/movie/447365">
+                          <h5 class="comment-title">
+                            가디언즈 오브 갤럭시: Volume 3
+                          </h5>
+                        </a>
+                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="comment-desc">
+                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
+                          모르는 미션에 나서는 이야기.
+                        </p>
+                        <div class="comment-genres">
+                          <span class="comment-genre"
+                            ><a href="/genre/878">SF</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/12">모험</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/28">액션</a></span
+                          >
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="comment-item">
+                      <a href="/movie/447365">
+                        <img
+                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                        />
+                      </a>
+                      <div class="comment-content">
+                        <a href="/movie/447365">
+                          <h5 class="comment-title">
+                            가디언즈 오브 갤럭시: Volume 3
+                          </h5>
+                        </a>
+                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="comment-desc">
+                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
+                          모르는 미션에 나서는 이야기.
+                        </p>
+                        <div class="comment-genres">
+                          <span class="comment-genre"
+                            ><a href="/genre/878">SF</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/12">모험</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/28">액션</a></span
+                          >
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="comment-item">
+                      <a href="/movie/447365">
+                        <img
+                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                        />
+                      </a>
+                      <div class="comment-content">
+                        <a href="/movie/447365">
+                          <h5 class="comment-title">
+                            가디언즈 오브 갤럭시: Volume 3
+                          </h5>
+                        </a>
+                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="comment-desc">
+                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
+                          모르는 미션에 나서는 이야기.
+                        </p>
+                        <div class="comment-genres">
+                          <span class="comment-genre"
+                            ><a href="/genre/878">SF</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/12">모험</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/28">액션</a></span
+                          >
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="comment-item">
+                      <a href="/movie/447365">
+                        <img
+                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                        />
+                      </a>
+                      <div class="comment-content">
+                        <a href="/movie/447365">
+                          <h5 class="comment-title">
+                            가디언즈 오브 갤럭시: Volume 3
+                          </h5>
+                        </a>
+                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="comment-desc">
+                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
+                          모르는 미션에 나서는 이야기.
+                        </p>
+                        <div class="comment-genres">
+                          <span class="comment-genre"
+                            ><a href="/genre/878">SF</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/12">모험</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/28">액션</a></span
+                          >
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="comment-item">
+                      <a href="/movie/447365">
+                        <img
+                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                        />
+                      </a>
+                      <div class="comment-content">
+                        <a href="/movie/447365">
+                          <h5 class="comment-title">
+                            가디언즈 오브 갤럭시: Volume 3
+                          </h5>
+                        </a>
+                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="comment-desc">
+                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
+                          모르는 미션에 나서는 이야기.
+                        </p>
+                        <div class="comment-genres">
+                          <span class="comment-genre"
+                            ><a href="/genre/878">SF</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/12">모험</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/28">액션</a></span
+                          >
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="comment-item">
+                      <a href="/movie/447365">
+                        <img
+                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                        />
+                      </a>
+                      <div class="comment-content">
+                        <a href="/movie/447365">
+                          <h5 class="comment-title">
+                            가디언즈 오브 갤럭시: Volume 3
+                          </h5>
+                        </a>
+                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="comment-desc">
+                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
+                          모르는 미션에 나서는 이야기.
+                        </p>
+                        <div class="comment-genres">
+                          <span class="comment-genre"
+                            ><a href="/genre/878">SF</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/12">모험</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/28">액션</a></span
+                          >
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="comment-item">
+                      <a href="/movie/447365">
+                        <img
+                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                        />
+                      </a>
+                      <div class="comment-content">
+                        <a href="/movie/447365">
+                          <h5 class="comment-title">
+                            가디언즈 오브 갤럭시: Volume 3
+                          </h5>
+                        </a>
+                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="comment-desc">
+                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
+                          모르는 미션에 나서는 이야기.
+                        </p>
+                        <div class="comment-genres">
+                          <span class="comment-genre"
+                            ><a href="/genre/878">SF</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/12">모험</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/28">액션</a></span
+                          >
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="comment-item">
+                      <a href="/movie/447365">
+                        <img
+                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                        />
+                      </a>
+                      <div class="comment-content">
+                        <a href="/movie/447365">
+                          <h5 class="comment-title">
+                            가디언즈 오브 갤럭시: Volume 3
+                          </h5>
+                        </a>
+                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="comment-desc">
+                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
+                          모르는 미션에 나서는 이야기.
+                        </p>
+                        <div class="comment-genres">
+                          <span class="comment-genre"
+                            ><a href="/genre/878">SF</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/12">모험</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/28">액션</a></span
+                          >
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="comment-item">
+                      <a href="/movie/447365">
+                        <img
+                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                        />
+                      </a>
+                      <div class="comment-content">
+                        <a href="/movie/447365">
+                          <h5 class="comment-title">
+                            가디언즈 오브 갤럭시: Volume 3
+                          </h5>
+                        </a>
+                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                        <p class="comment-desc">
+                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
+                          모르는 미션에 나서는 이야기.
+                        </p>
+                        <div class="comment-genres">
+                          <span class="comment-genre"
+                            ><a href="/genre/878">SF</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/12">모험</a></span
+                          >
+                          <span class="comment-genre"
+                            ><a href="/genre/28">액션</a></span
+                          >
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </section>
       </main>
     </div>
     <script>
@@ -479,6 +949,38 @@
           console.log("fetch error: ", error);
         }
       }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+      // swiper //
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 1,
+        centeredSlides: true,
+        spaceBetween: 10,
+        loop: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+          600: {
+            slidesPerView: 2,
+            spaceBetween: 50,
+          },
+          800: {
+            slidesPerView: 3,
+            spaceBetween: 50,
+          },
+          1100: {
+            slidesPerView: 4,
+            spaceBetween: 60,
+          },
+        },
+      });
     </script>
   </body>
 </html>
