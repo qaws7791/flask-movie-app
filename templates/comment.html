@@ -112,7 +112,7 @@
         <div class="input-group mb-3 w-75">
           <label class="input-group-text" for="inputGroupSelect01">별점</label>
           <select class="form-select" id="star">
-            <option selected>-- 선택하기 --</option>
+            <option selected value="0">-- 선택하기 --</option>
             <option value="1">⭐</option>
             <option value="2">⭐⭐</option>
             <option value="3">⭐⭐⭐</option>
@@ -124,12 +124,14 @@
           <textarea
             class="form-control"
             placeholder="Leave a comment here"
-            id="floatingTextarea2"
+            id="comment"
             style="height: 150px"
           ></textarea>
           <label for="floatingTextarea2">코멘트를 입력하세요.</label>
         </div>
-        <button type="button" class="btn btn-outline-dark">확인</button>
+        <button onclick="posting()" type="button" class="btn btn-outline-dark">
+          확인
+        </button>
       </div>
       <div class="comments">
         <div class="mycards" id="comment-list">
@@ -172,6 +174,7 @@
       const title = document.getElementById("title");
       const movieImg = document.getElementById("movie-img");
       const inputImage = document.getElementById("input-image");
+      const commentList = document.querySelector("#comment-list");
       console.log(url);
       function setMovie(movie) {
         title.innerText = movie.title;
@@ -200,7 +203,55 @@
       window.onload = function () {
         console.log("onload");
         fetchData();
+        listing();
       };
+
+      function posting() {
+        let name = document.querySelector("#name").value;
+        let comment = document.querySelector("#comment").value;
+        let star = document.querySelector("#star").value;
+
+        let formData = new FormData();
+        formData.append("name", name);
+        formData.append("comment", comment);
+        formData.append("star", star);
+        formData.append("movie_id", "{{id}}");
+
+        fetch("/api/comment", { method: "POST", body: formData })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            alert(data["msg"]);
+            window.localStorage.reload();
+          });
+      }
+
+      function listing() {
+        fetch("/api/comment/{{id}}")
+          .then((res) => res.json())
+          .then((data) => {
+            commentList.innerHTML = "";
+            data["result"].forEach((item) => {
+              const name = item.name;
+              const comment = item.comment;
+              const star = item.star;
+              const star_repeat = "⭐".repeat(star);
+
+              const temp_html = `
+                <div class="card-body">
+                  <blockquote class="blockquote mb-0">
+                    <p>${comment}</p>
+                    <p>${star_repeat}</p>
+                    <footer class="blockquote-footer">${name}</footer>
+                  </blockquote>
+                </div>
+              `;
+              const card = document.createElement("div");
+              card.innerHTML = temp_html;
+              commentList.appendChild(card);
+            });
+          });
+      }
     </script>
   </body>
 </html>
