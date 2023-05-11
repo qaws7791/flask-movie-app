@@ -35,6 +35,17 @@ print(genreList)
 def home():
     return render_template('index.html')
 
+@app.route('/movie/<int:id>')
+def movie(id):
+    return render_template('comment.html',id=id)
+    
+@app.route('/genre/<int:id>')
+def genre(id):
+    if id in genreList:
+        return render_template('genre.html',id=id)
+    else:
+        return redirect(url_for('home'))
+##### api #####
 ## create comment
 @app.route("/api/comment", methods=["POST"])
 def create_comment():
@@ -77,27 +88,21 @@ def get_comments(id):
 ## get recently comment list
 @app.route("/api/recent/<int:limit>", methods=["GET"])
 def get_recent_comments(limit):
-    all_comments = list(db.comment.find({}, {'_id': False}))
+    all_comments = list(db.comment.find({}, {'_id': False}).sort("_id",-1).limit(limit))
     return jsonify({'result': all_comments})
 
-## get recently comment list
+## get genre comment list
 @app.route("/api/genre/<int:genre>", methods=["GET"])
 def get_genre_comments(genre):
-    all_comments = list(db.comment.find({'movie_genres.id':str(genre)}, {'_id': False}))
-    return jsonify({'result': all_comments})
-    
-
-
-@app.route('/movie/<int:id>')
-def movie(id):
-    return render_template('comment.html',id=id)
-    
-@app.route('/genre/<int:id>')
-def genre(id):
-    if id in genreList:
-        return render_template('genre.html',id=id)
+    if genre in genreList:
+        all_comments = list(db.comment.find({'movie_genres.id':str(genre)}, {'_id': False}).sort("_id",-1).limit(10))
+        return jsonify({'result': all_comments})
     else:
-        return redirect(url_for('home'))
+        return jsonify({'result': []})
+    
+
+
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5050, debug=True)
