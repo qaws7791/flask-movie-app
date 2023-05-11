@@ -54,6 +54,12 @@ def get_comments(id):
     all_comments = list(db.comment.find({'movie_id':str(id)}, {'_id': False}))
 
     return jsonify({'result': all_comments})
+
+## get recently comment list
+@app.route("/api/recent/<int:limit>", methods=["GET"])
+def get_recent_comments(limit):
+    all_comments = list(db.comment.find({}, {'_id': False}))
+    return jsonify({'result': all_comments})
     
 
 

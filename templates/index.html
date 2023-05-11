@@ -13,6 +13,9 @@
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap");
 
+      :root {
+        --swiper-theme-color: #ffffff;
+      }
       *,
       html,
       body {
@@ -30,14 +33,16 @@
         text-decoration: none;
       }
       .container {
-        width: 100%;
         max-width: 1230px;
-        height: 100%;
         margin: 0 auto;
-
-        background-color: aliceblue;
+      }
+      .header_wrapper {
+        padding: 15px;
+        background-color: #94cdff;
       }
       .header {
+        max-width: 1230px;
+        margin: 0 auto;
         padding: 80px 0;
         background-color: #94cdff;
         display: flex;
@@ -53,7 +58,7 @@
         padding: 10px;
         line-height: 1.5;
         font-size: 24px;
-        border-radius: 5px;
+        border-radius: 50px;
         outline: none;
         border: 2px solid #d2d2d2;
       }
@@ -61,13 +66,17 @@
       #input-title:hover {
         border: 2px solid #1568ff;
       }
+      #input-title.oninput {
+        border-radius: 10px 10px 0 0;
+      }
       #movie-list {
         list-style-type: none;
         max-height: 500px;
         overflow: hidden;
         overflow-y: auto;
         border: 2px solid #d2d2d2;
-        border-radius: 5px;
+        border-radius: 0 0 10px 10px;
+        border-top: 0;
         margin: 0;
         padding: 0;
         width: 100%;
@@ -79,7 +88,8 @@
       .movie-item {
         width: 100%;
       }
-      .movie-item:hover {
+      .movie-item:hover,
+      .movie-item:focus {
         background-color: #eeeeee;
       }
       .movie-item > a {
@@ -109,14 +119,26 @@
       .input-from > input {
         width: 100%;
       }
-      .main {
-        margin-top: 60px;
-        width: 100%;
-        padding: 0 15px;
+      .recent_wrapper {
+        padding: 15px;
+        background-color: beige;
+      }
+      .recent {
+        max-width: 1230px;
+        margin: 0 auto;
+      }
+      .action_wrapper {
+        padding: 15px;
+        background-color: darkseagreen;
+      }
+      .comedy_wrapper {
+        padding: 15px;
+        background-color: pink;
       }
 
       .main-title {
         text-align: center;
+        margin: 10px 0;
       }
 
       .comment-list {
@@ -129,7 +151,6 @@
       .comment-item {
         flex: 1;
         list-style: none;
-        border: 1px solid rgb(212, 212, 212);
         border-radius: 10px;
         overflow: hidden;
         max-width: 240px;
@@ -173,7 +194,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
       }
       .comment-btns {
@@ -214,6 +235,7 @@
       }
 
       /* swiper */
+
       .swiper-section {
         position: relative;
       }
@@ -259,6 +281,16 @@
         bottom: var(--swiper-pagination-bottom, 20px);
       }
 
+      /* footer */
+      .footer_wrapper {
+        border-top: 1px solid #ccc;
+      }
+      .footer {
+        max-width: 1230px;
+        margin: 0 auto;
+        padding: 15px;
+      }
+
       /*media*/
 
       @media (max-width: 800px) {
@@ -297,7 +329,7 @@
     </style>
   </head>
   <body>
-    <div class="container">
+    <div class="header_wrapper">
       <header class="header">
         <h1 class="header-title">영화 추천 서비스</h1>
         <div class="input-from" id="input-form">
@@ -314,522 +346,783 @@
           <ul id="movie-list"></ul>
         </div>
       </header>
-      <main class="main">
-        <h2 class="main-title">코멘트 리스트</h2>
-        <ul class="comment-list">
-          <li class="comment-item">
-            <a href="/movie/502356">
-              <img
-                src="https://image.tmdb.org/t/p/original/dlGyzCxbBQK1U2O5o31Z1hB6erc.jpg"
-              />
-            </a>
-            <div class="comment-content">
-              <a href="/movie/502356">
-                <h5 class="comment-title">슈퍼 마리오 브라더스</h5>
-              </a>
-              <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-              <p class="comment-desc">
-                따단-딴-따단-딴 ♫ 전 세계를 열광시킬 올 타임 슈퍼 어드벤처의
-                등장! 뉴욕의 평범한 배관공 형제 '마리오'와 ‘루이지’는 배수관
-                고장으로 위기에 빠진 도시를 구하려다 미스터리한 초록색 파이프
-                안으로 빨려 들어가게 된다.
-              </p>
-              <div class="comment-genres">
-                <span class="comment-genre">
-                  <a href="/genre/16">애니메이션</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/12">모험</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/10751">가족</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/14">판타지</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/35">코미디</a>
-                </span>
+    </div>
+    <main class="main">
+      <div class="recent_wrapper">
+        <div class="container">
+          <h2 class="main-title">코멘트 리스트</h2>
+          <div class="swiper-section">
+            <div class="movie-swiper">
+              <div class="overflow-wrapper">
+                <div #swiperRef="" class="swiper recentSwiper">
+                  <div class="swiper-wrapper"></div>
+                </div>
               </div>
-              <!-- <div class="comment-btns">
-                <a href="/movie/502356" class="btn">이동</a>
-              </div> -->
+              <div class="recentSwiper-button-next swiper-button-next"></div>
+              <div class="recentSwiper-button-prev swiper-button-prev"></div>
+              <div class="recentSwiper-pagination swiper-pagination"></div>
             </div>
-          </li>
-          <li class="comment-item">
-            <a href="/movie/502356">
-              <img
-                src="https://image.tmdb.org/t/p/original/dlGyzCxbBQK1U2O5o31Z1hB6erc.jpg"
-              />
-            </a>
-            <div class="comment-content">
-              <a href="/movie/502356">
-                <h5 class="comment-title">슈퍼 마리오 브라더스</h5>
-              </a>
-              <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-              <p class="comment-desc">
-                따단-딴-따단-딴 ♫ 전 세계를 열광시킬 올 타임 슈퍼 어드벤처의
-                등장! 뉴욕의 평범한 배관공 형제 '마리오'와 ‘루이지’는 배수관
-                고장으로 위기에 빠진 도시를 구하려다 미스터리한 초록색 파이프
-                안으로 빨려 들어가게 된다.
-              </p>
-              <div class="comment-genres">
-                <span class="comment-genre">
-                  <a href="/genre/16">애니메이션</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/12">모험</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/10751">가족</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/14">판타지</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/35">코미디</a>
-                </span>
-              </div>
-              <!-- <div class="comment-btns">
-                <a href="/movie/502356" class="btn">이동</a>
-              </div> -->
-            </div>
-          </li>
-          <li class="comment-item">
-            <a href="/movie/502356">
-              <img
-                src="https://image.tmdb.org/t/p/original/dlGyzCxbBQK1U2O5o31Z1hB6erc.jpg"
-              />
-            </a>
-            <div class="comment-content">
-              <a href="/movie/502356">
-                <h5 class="comment-title">슈퍼 마리오 브라더스</h5>
-              </a>
-              <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-              <p class="comment-desc">
-                따단-딴-따단-딴 ♫ 전 세계를 열광시킬 올 타임 슈퍼 어드벤처의
-                등장! 뉴욕의 평범한 배관공 형제 '마리오'와 ‘루이지’는 배수관
-                고장으로 위기에 빠진 도시를 구하려다 미스터리한 초록색 파이프
-                안으로 빨려 들어가게 된다.
-              </p>
-              <div class="comment-genres">
-                <span class="comment-genre">
-                  <a href="/genre/16">애니메이션</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/12">모험</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/10751">가족</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/14">판타지</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/35">코미디</a>
-                </span>
-              </div>
-              <!-- <div class="comment-btns">
-                <a href="/movie/502356" class="btn">이동</a>
-              </div> -->
-            </div>
-          </li>
-          <li class="comment-item">
-            <a href="/movie/502356">
-              <img
-                src="https://image.tmdb.org/t/p/original/dlGyzCxbBQK1U2O5o31Z1hB6erc.jpg"
-              />
-            </a>
-            <div class="comment-content">
-              <a href="/movie/502356">
-                <h5 class="comment-title">슈퍼 마리오 브라더스</h5>
-              </a>
-              <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-              <p class="comment-desc">
-                따단-딴-따단-딴 ♫ 전 세계를 열광시킬 올 타임 슈퍼 어드벤처의
-                등장! 뉴욕의 평범한 배관공 형제 '마리오'와 ‘루이지’는 배수관
-                고장으로 위기에 빠진 도시를 구하려다 미스터리한 초록색 파이프
-                안으로 빨려 들어가게 된다.
-              </p>
-              <div class="comment-genres">
-                <span class="comment-genre">
-                  <a href="/genre/16">애니메이션</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/12">모험</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/10751">가족</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/14">판타지</a>
-                </span>
-                <span class="comment-genre">
-                  <a href="/genre/35">코미디</a>
-                </span>
-              </div>
-              <!-- <div class="comment-btns">
-                <a href="/movie/502356" class="btn">이동</a>
-              </div> -->
-            </div>
-          </li>
-        </ul>
-        <h2 class="main-title">액션 영화</h2>
-        <section class="swiper-section">
-          <div class="movie-swiper">
-            <div class="overflow-wrapper">
-              <div #swiperRef="" class="swiper mySwiper">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <li class="comment-item">
-                      <a href="/movie/447365">
-                        <img
-                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
-                        />
-                      </a>
-                      <div class="comment-content">
+          </div>
+        </div>
+      </div>
+      <div class="action_wrapper">
+        <div class="container">
+          <h2 class="main-title">액션 영화</h2>
+          <div class="swiper-section">
+            <div class="movie-swiper">
+              <div class="overflow-wrapper">
+                <div #swiperRef="" class="swiper actionSwiper">
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                      <li class="comment-item">
                         <a href="/movie/447365">
-                          <h5 class="comment-title">
-                            가디언즈 오브 갤럭시: Volume 3
-                          </h5>
+                          <img
+                            src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                          />
                         </a>
-                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-                        <p class="comment-desc">
-                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
-                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
-                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
-                          모르는 미션에 나서는 이야기.
-                        </p>
-                        <div class="comment-genres">
-                          <span class="comment-genre"
-                            ><a href="/genre/878">SF</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/12">모험</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/28">액션</a></span
-                          >
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">
+                              가디언즈 오브 갤럭시: Volume 3
+                            </h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                            은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                            힘을 모으고, 성공하지 못할 경우 그들의 마지막이
+                            될지도 모르는 미션에 나서는 이야기.
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/878">SF</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/12">모험</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/28">액션</a></span
+                            >
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  </div>
-                  <div class="swiper-slide">
-                    <li class="comment-item">
-                      <a href="/movie/447365">
-                        <img
-                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
-                        />
-                      </a>
-                      <div class="comment-content">
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
                         <a href="/movie/447365">
-                          <h5 class="comment-title">
-                            가디언즈 오브 갤럭시: Volume 3
-                          </h5>
+                          <img
+                            src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                          />
                         </a>
-                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-                        <p class="comment-desc">
-                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
-                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
-                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
-                          모르는 미션에 나서는 이야기.
-                        </p>
-                        <div class="comment-genres">
-                          <span class="comment-genre"
-                            ><a href="/genre/878">SF</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/12">모험</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/28">액션</a></span
-                          >
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">
+                              가디언즈 오브 갤럭시: Volume 3
+                            </h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                            은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                            힘을 모으고, 성공하지 못할 경우 그들의 마지막이
+                            될지도 모르는 미션에 나서는 이야기.
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/878">SF</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/12">모험</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/28">액션</a></span
+                            >
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  </div>
-                  <div class="swiper-slide">
-                    <li class="comment-item">
-                      <a href="/movie/447365">
-                        <img
-                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
-                        />
-                      </a>
-                      <div class="comment-content">
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
                         <a href="/movie/447365">
-                          <h5 class="comment-title">
-                            가디언즈 오브 갤럭시: Volume 3
-                          </h5>
+                          <img
+                            src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                          />
                         </a>
-                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-                        <p class="comment-desc">
-                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
-                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
-                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
-                          모르는 미션에 나서는 이야기.
-                        </p>
-                        <div class="comment-genres">
-                          <span class="comment-genre"
-                            ><a href="/genre/878">SF</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/12">모험</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/28">액션</a></span
-                          >
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">
+                              가디언즈 오브 갤럭시: Volume 3
+                            </h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                            은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                            힘을 모으고, 성공하지 못할 경우 그들의 마지막이
+                            될지도 모르는 미션에 나서는 이야기.
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/878">SF</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/12">모험</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/28">액션</a></span
+                            >
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  </div>
-                  <div class="swiper-slide">
-                    <li class="comment-item">
-                      <a href="/movie/447365">
-                        <img
-                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
-                        />
-                      </a>
-                      <div class="comment-content">
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
                         <a href="/movie/447365">
-                          <h5 class="comment-title">
-                            가디언즈 오브 갤럭시: Volume 3
-                          </h5>
+                          <img
+                            src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                          />
                         </a>
-                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-                        <p class="comment-desc">
-                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
-                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
-                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
-                          모르는 미션에 나서는 이야기.
-                        </p>
-                        <div class="comment-genres">
-                          <span class="comment-genre"
-                            ><a href="/genre/878">SF</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/12">모험</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/28">액션</a></span
-                          >
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">
+                              가디언즈 오브 갤럭시: Volume 3
+                            </h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                            은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                            힘을 모으고, 성공하지 못할 경우 그들의 마지막이
+                            될지도 모르는 미션에 나서는 이야기.
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/878">SF</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/12">모험</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/28">액션</a></span
+                            >
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  </div>
-                  <div class="swiper-slide">
-                    <li class="comment-item">
-                      <a href="/movie/447365">
-                        <img
-                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
-                        />
-                      </a>
-                      <div class="comment-content">
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
                         <a href="/movie/447365">
-                          <h5 class="comment-title">
-                            가디언즈 오브 갤럭시: Volume 3
-                          </h5>
+                          <img
+                            src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                          />
                         </a>
-                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-                        <p class="comment-desc">
-                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
-                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
-                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
-                          모르는 미션에 나서는 이야기.
-                        </p>
-                        <div class="comment-genres">
-                          <span class="comment-genre"
-                            ><a href="/genre/878">SF</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/12">모험</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/28">액션</a></span
-                          >
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">
+                              가디언즈 오브 갤럭시: Volume 3
+                            </h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                            은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                            힘을 모으고, 성공하지 못할 경우 그들의 마지막이
+                            될지도 모르는 미션에 나서는 이야기.
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/878">SF</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/12">모험</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/28">액션</a></span
+                            >
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  </div>
-                  <div class="swiper-slide">
-                    <li class="comment-item">
-                      <a href="/movie/447365">
-                        <img
-                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
-                        />
-                      </a>
-                      <div class="comment-content">
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
                         <a href="/movie/447365">
-                          <h5 class="comment-title">
-                            가디언즈 오브 갤럭시: Volume 3
-                          </h5>
+                          <img
+                            src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                          />
                         </a>
-                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-                        <p class="comment-desc">
-                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
-                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
-                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
-                          모르는 미션에 나서는 이야기.
-                        </p>
-                        <div class="comment-genres">
-                          <span class="comment-genre"
-                            ><a href="/genre/878">SF</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/12">모험</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/28">액션</a></span
-                          >
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">
+                              가디언즈 오브 갤럭시: Volume 3
+                            </h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                            은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                            힘을 모으고, 성공하지 못할 경우 그들의 마지막이
+                            될지도 모르는 미션에 나서는 이야기.
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/878">SF</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/12">모험</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/28">액션</a></span
+                            >
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  </div>
-                  <div class="swiper-slide">
-                    <li class="comment-item">
-                      <a href="/movie/447365">
-                        <img
-                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
-                        />
-                      </a>
-                      <div class="comment-content">
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
                         <a href="/movie/447365">
-                          <h5 class="comment-title">
-                            가디언즈 오브 갤럭시: Volume 3
-                          </h5>
+                          <img
+                            src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                          />
                         </a>
-                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-                        <p class="comment-desc">
-                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
-                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
-                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
-                          모르는 미션에 나서는 이야기.
-                        </p>
-                        <div class="comment-genres">
-                          <span class="comment-genre"
-                            ><a href="/genre/878">SF</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/12">모험</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/28">액션</a></span
-                          >
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">
+                              가디언즈 오브 갤럭시: Volume 3
+                            </h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                            은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                            힘을 모으고, 성공하지 못할 경우 그들의 마지막이
+                            될지도 모르는 미션에 나서는 이야기.
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/878">SF</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/12">모험</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/28">액션</a></span
+                            >
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  </div>
-                  <div class="swiper-slide">
-                    <li class="comment-item">
-                      <a href="/movie/447365">
-                        <img
-                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
-                        />
-                      </a>
-                      <div class="comment-content">
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
                         <a href="/movie/447365">
-                          <h5 class="comment-title">
-                            가디언즈 오브 갤럭시: Volume 3
-                          </h5>
+                          <img
+                            src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                          />
                         </a>
-                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-                        <p class="comment-desc">
-                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
-                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
-                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
-                          모르는 미션에 나서는 이야기.
-                        </p>
-                        <div class="comment-genres">
-                          <span class="comment-genre"
-                            ><a href="/genre/878">SF</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/12">모험</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/28">액션</a></span
-                          >
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">
+                              가디언즈 오브 갤럭시: Volume 3
+                            </h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                            은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                            힘을 모으고, 성공하지 못할 경우 그들의 마지막이
+                            될지도 모르는 미션에 나서는 이야기.
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/878">SF</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/12">모험</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/28">액션</a></span
+                            >
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  </div>
-                  <div class="swiper-slide">
-                    <li class="comment-item">
-                      <a href="/movie/447365">
-                        <img
-                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
-                        />
-                      </a>
-                      <div class="comment-content">
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
                         <a href="/movie/447365">
-                          <h5 class="comment-title">
-                            가디언즈 오브 갤럭시: Volume 3
-                          </h5>
+                          <img
+                            src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                          />
                         </a>
-                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-                        <p class="comment-desc">
-                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
-                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
-                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
-                          모르는 미션에 나서는 이야기.
-                        </p>
-                        <div class="comment-genres">
-                          <span class="comment-genre"
-                            ><a href="/genre/878">SF</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/12">모험</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/28">액션</a></span
-                          >
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">
+                              가디언즈 오브 갤럭시: Volume 3
+                            </h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                            은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                            힘을 모으고, 성공하지 못할 경우 그들의 마지막이
+                            될지도 모르는 미션에 나서는 이야기.
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/878">SF</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/12">모험</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/28">액션</a></span
+                            >
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  </div>
-                  <div class="swiper-slide">
-                    <li class="comment-item">
-                      <a href="/movie/447365">
-                        <img
-                          src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
-                        />
-                      </a>
-                      <div class="comment-content">
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
                         <a href="/movie/447365">
-                          <h5 class="comment-title">
-                            가디언즈 오브 갤럭시: Volume 3
-                          </h5>
+                          <img
+                            src="https://image.tmdb.org/t/p/original/2LfL0flDTgwJgoEhO9NhDLeDTTK.jpg"
+                          />
                         </a>
-                        <p class="comment-rating">⭐⭐⭐⭐⭐</p>
-                        <p class="comment-desc">
-                          가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
-                          은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
-                          힘을 모으고, 성공하지 못할 경우 그들의 마지막이 될지도
-                          모르는 미션에 나서는 이야기.
-                        </p>
-                        <div class="comment-genres">
-                          <span class="comment-genre"
-                            ><a href="/genre/878">SF</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/12">모험</a></span
-                          >
-                          <span class="comment-genre"
-                            ><a href="/genre/28">액션</a></span
-                          >
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">
+                              가디언즈 오브 갤럭시: Volume 3
+                            </h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            가모라를 잃고 슬픔에 빠져 있던 피터 퀼이 위기에 처한
+                            은하계와 동료를 지키기 위해 다시 한 번 가디언즈 팀과
+                            힘을 모으고, 성공하지 못할 경우 그들의 마지막이
+                            될지도 모르는 미션에 나서는 이야기.
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/878">SF</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/12">모험</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/28">액션</a></span
+                            >
+                          </div>
                         </div>
-                      </div>
-                    </li>
+                      </li>
+                    </div>
                   </div>
                 </div>
               </div>
+              <div class="actionSwiper-button-next swiper-button-next"></div>
+              <div class="actionSwiper-button-prev swiper-button-prev"></div>
+              <div class="actionSwiper-pagination swiper-pagination"></div>
             </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
           </div>
-        </section>
-      </main>
+        </div>
+      </div>
+      <div class="comedy_wrapper">
+        <div class="container">
+          <h2 class="main-title">액션 영화</h2>
+          <div class="swiper-section">
+            <div class="movie-swiper">
+              <div class="overflow-wrapper">
+                <div #swiperRef="" class="swiper comedySwiper">
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                      <li class="comment-item">
+                        <a href="/movie/447365">
+                          <img
+                            src="https://image.tmdb.org/t/p/original/9RIY2JW0JLQl2MOXdkeFAVqP57T.jpg"
+                          />
+                        </a>
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">드림</h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            선수 생활 사상 최악의 위기를 맞은 쏘울리스 축구 선수
+                            홍대. 계획도, 의지도 없던 홈리스 풋볼 월드컵
+                            감독으로 재능기부에 나서게 된다. 각본 없는 각본으로
+                            열정리스 현실파 PD 소민이 다큐 제작으로 합류하게
+                            되면서 뜯어진 운동화와 슬리퍼, 늘어진 반팔 티셔츠를
+                            필두로 운동이라고는 한 번도 해본 적 없는 특별한
+                            선수들이 국가대표로 선발된다. 택견인지 축구인지
+                            헷갈리는 실력과 발보다 말이 앞서는 홈리스 선수들의
+                            환장할 팀워크, 다큐에 대사와 상황 그리고 진정성 없는
+                            연출을 강요하는 소민에 기가 막히는 감독 홍대. 하지만
+                            포기할 틈도 없이, 월드컵 출전일은 코앞으로
+                            다가오는데...
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/18">드라마</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/35">코미디</a></span
+                            >
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
+                        <a href="/movie/447365">
+                          <img
+                            src="https://image.tmdb.org/t/p/original/9RIY2JW0JLQl2MOXdkeFAVqP57T.jpg"
+                          />
+                        </a>
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">드림</h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            선수 생활 사상 최악의 위기를 맞은 쏘울리스 축구 선수
+                            홍대. 계획도, 의지도 없던 홈리스 풋볼 월드컵
+                            감독으로 재능기부에 나서게 된다. 각본 없는 각본으로
+                            열정리스 현실파 PD 소민이 다큐 제작으로 합류하게
+                            되면서 뜯어진 운동화와 슬리퍼, 늘어진 반팔 티셔츠를
+                            필두로 운동이라고는 한 번도 해본 적 없는 특별한
+                            선수들이 국가대표로 선발된다. 택견인지 축구인지
+                            헷갈리는 실력과 발보다 말이 앞서는 홈리스 선수들의
+                            환장할 팀워크, 다큐에 대사와 상황 그리고 진정성 없는
+                            연출을 강요하는 소민에 기가 막히는 감독 홍대. 하지만
+                            포기할 틈도 없이, 월드컵 출전일은 코앞으로
+                            다가오는데...
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/18">드라마</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/35">코미디</a></span
+                            >
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
+                        <a href="/movie/447365">
+                          <img
+                            src="https://image.tmdb.org/t/p/original/9RIY2JW0JLQl2MOXdkeFAVqP57T.jpg"
+                          />
+                        </a>
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">드림</h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            선수 생활 사상 최악의 위기를 맞은 쏘울리스 축구 선수
+                            홍대. 계획도, 의지도 없던 홈리스 풋볼 월드컵
+                            감독으로 재능기부에 나서게 된다. 각본 없는 각본으로
+                            열정리스 현실파 PD 소민이 다큐 제작으로 합류하게
+                            되면서 뜯어진 운동화와 슬리퍼, 늘어진 반팔 티셔츠를
+                            필두로 운동이라고는 한 번도 해본 적 없는 특별한
+                            선수들이 국가대표로 선발된다. 택견인지 축구인지
+                            헷갈리는 실력과 발보다 말이 앞서는 홈리스 선수들의
+                            환장할 팀워크, 다큐에 대사와 상황 그리고 진정성 없는
+                            연출을 강요하는 소민에 기가 막히는 감독 홍대. 하지만
+                            포기할 틈도 없이, 월드컵 출전일은 코앞으로
+                            다가오는데...
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/18">드라마</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/35">코미디</a></span
+                            >
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
+                        <a href="/movie/447365">
+                          <img
+                            src="https://image.tmdb.org/t/p/original/9RIY2JW0JLQl2MOXdkeFAVqP57T.jpg"
+                          />
+                        </a>
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">드림</h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            선수 생활 사상 최악의 위기를 맞은 쏘울리스 축구 선수
+                            홍대. 계획도, 의지도 없던 홈리스 풋볼 월드컵
+                            감독으로 재능기부에 나서게 된다. 각본 없는 각본으로
+                            열정리스 현실파 PD 소민이 다큐 제작으로 합류하게
+                            되면서 뜯어진 운동화와 슬리퍼, 늘어진 반팔 티셔츠를
+                            필두로 운동이라고는 한 번도 해본 적 없는 특별한
+                            선수들이 국가대표로 선발된다. 택견인지 축구인지
+                            헷갈리는 실력과 발보다 말이 앞서는 홈리스 선수들의
+                            환장할 팀워크, 다큐에 대사와 상황 그리고 진정성 없는
+                            연출을 강요하는 소민에 기가 막히는 감독 홍대. 하지만
+                            포기할 틈도 없이, 월드컵 출전일은 코앞으로
+                            다가오는데...
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/18">드라마</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/35">코미디</a></span
+                            >
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
+                        <a href="/movie/447365">
+                          <img
+                            src="https://image.tmdb.org/t/p/original/9RIY2JW0JLQl2MOXdkeFAVqP57T.jpg"
+                          />
+                        </a>
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">드림</h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            선수 생활 사상 최악의 위기를 맞은 쏘울리스 축구 선수
+                            홍대. 계획도, 의지도 없던 홈리스 풋볼 월드컵
+                            감독으로 재능기부에 나서게 된다. 각본 없는 각본으로
+                            열정리스 현실파 PD 소민이 다큐 제작으로 합류하게
+                            되면서 뜯어진 운동화와 슬리퍼, 늘어진 반팔 티셔츠를
+                            필두로 운동이라고는 한 번도 해본 적 없는 특별한
+                            선수들이 국가대표로 선발된다. 택견인지 축구인지
+                            헷갈리는 실력과 발보다 말이 앞서는 홈리스 선수들의
+                            환장할 팀워크, 다큐에 대사와 상황 그리고 진정성 없는
+                            연출을 강요하는 소민에 기가 막히는 감독 홍대. 하지만
+                            포기할 틈도 없이, 월드컵 출전일은 코앞으로
+                            다가오는데...
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/18">드라마</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/35">코미디</a></span
+                            >
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
+                        <a href="/movie/447365">
+                          <img
+                            src="https://image.tmdb.org/t/p/original/9RIY2JW0JLQl2MOXdkeFAVqP57T.jpg"
+                          />
+                        </a>
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">드림</h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            선수 생활 사상 최악의 위기를 맞은 쏘울리스 축구 선수
+                            홍대. 계획도, 의지도 없던 홈리스 풋볼 월드컵
+                            감독으로 재능기부에 나서게 된다. 각본 없는 각본으로
+                            열정리스 현실파 PD 소민이 다큐 제작으로 합류하게
+                            되면서 뜯어진 운동화와 슬리퍼, 늘어진 반팔 티셔츠를
+                            필두로 운동이라고는 한 번도 해본 적 없는 특별한
+                            선수들이 국가대표로 선발된다. 택견인지 축구인지
+                            헷갈리는 실력과 발보다 말이 앞서는 홈리스 선수들의
+                            환장할 팀워크, 다큐에 대사와 상황 그리고 진정성 없는
+                            연출을 강요하는 소민에 기가 막히는 감독 홍대. 하지만
+                            포기할 틈도 없이, 월드컵 출전일은 코앞으로
+                            다가오는데...
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/18">드라마</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/35">코미디</a></span
+                            >
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
+                        <a href="/movie/447365">
+                          <img
+                            src="https://image.tmdb.org/t/p/original/9RIY2JW0JLQl2MOXdkeFAVqP57T.jpg"
+                          />
+                        </a>
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">드림</h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            선수 생활 사상 최악의 위기를 맞은 쏘울리스 축구 선수
+                            홍대. 계획도, 의지도 없던 홈리스 풋볼 월드컵
+                            감독으로 재능기부에 나서게 된다. 각본 없는 각본으로
+                            열정리스 현실파 PD 소민이 다큐 제작으로 합류하게
+                            되면서 뜯어진 운동화와 슬리퍼, 늘어진 반팔 티셔츠를
+                            필두로 운동이라고는 한 번도 해본 적 없는 특별한
+                            선수들이 국가대표로 선발된다. 택견인지 축구인지
+                            헷갈리는 실력과 발보다 말이 앞서는 홈리스 선수들의
+                            환장할 팀워크, 다큐에 대사와 상황 그리고 진정성 없는
+                            연출을 강요하는 소민에 기가 막히는 감독 홍대. 하지만
+                            포기할 틈도 없이, 월드컵 출전일은 코앞으로
+                            다가오는데...
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/18">드라마</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/35">코미디</a></span
+                            >
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
+                        <a href="/movie/447365">
+                          <img
+                            src="https://image.tmdb.org/t/p/original/9RIY2JW0JLQl2MOXdkeFAVqP57T.jpg"
+                          />
+                        </a>
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">드림</h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            선수 생활 사상 최악의 위기를 맞은 쏘울리스 축구 선수
+                            홍대. 계획도, 의지도 없던 홈리스 풋볼 월드컵
+                            감독으로 재능기부에 나서게 된다. 각본 없는 각본으로
+                            열정리스 현실파 PD 소민이 다큐 제작으로 합류하게
+                            되면서 뜯어진 운동화와 슬리퍼, 늘어진 반팔 티셔츠를
+                            필두로 운동이라고는 한 번도 해본 적 없는 특별한
+                            선수들이 국가대표로 선발된다. 택견인지 축구인지
+                            헷갈리는 실력과 발보다 말이 앞서는 홈리스 선수들의
+                            환장할 팀워크, 다큐에 대사와 상황 그리고 진정성 없는
+                            연출을 강요하는 소민에 기가 막히는 감독 홍대. 하지만
+                            포기할 틈도 없이, 월드컵 출전일은 코앞으로
+                            다가오는데...
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/18">드라마</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/35">코미디</a></span
+                            >
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
+                        <a href="/movie/447365">
+                          <img
+                            src="https://image.tmdb.org/t/p/original/9RIY2JW0JLQl2MOXdkeFAVqP57T.jpg"
+                          />
+                        </a>
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">드림</h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            선수 생활 사상 최악의 위기를 맞은 쏘울리스 축구 선수
+                            홍대. 계획도, 의지도 없던 홈리스 풋볼 월드컵
+                            감독으로 재능기부에 나서게 된다. 각본 없는 각본으로
+                            열정리스 현실파 PD 소민이 다큐 제작으로 합류하게
+                            되면서 뜯어진 운동화와 슬리퍼, 늘어진 반팔 티셔츠를
+                            필두로 운동이라고는 한 번도 해본 적 없는 특별한
+                            선수들이 국가대표로 선발된다. 택견인지 축구인지
+                            헷갈리는 실력과 발보다 말이 앞서는 홈리스 선수들의
+                            환장할 팀워크, 다큐에 대사와 상황 그리고 진정성 없는
+                            연출을 강요하는 소민에 기가 막히는 감독 홍대. 하지만
+                            포기할 틈도 없이, 월드컵 출전일은 코앞으로
+                            다가오는데...
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/18">드라마</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/35">코미디</a></span
+                            >
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                    <div class="swiper-slide">
+                      <li class="comment-item">
+                        <a href="/movie/447365">
+                          <img
+                            src="https://image.tmdb.org/t/p/original/9RIY2JW0JLQl2MOXdkeFAVqP57T.jpg"
+                          />
+                        </a>
+                        <div class="comment-content">
+                          <a href="/movie/447365">
+                            <h5 class="comment-title">드림</h5>
+                          </a>
+                          <p class="comment-rating">⭐⭐⭐⭐⭐</p>
+                          <p class="comment-desc">
+                            선수 생활 사상 최악의 위기를 맞은 쏘울리스 축구 선수
+                            홍대. 계획도, 의지도 없던 홈리스 풋볼 월드컵
+                            감독으로 재능기부에 나서게 된다. 각본 없는 각본으로
+                            열정리스 현실파 PD 소민이 다큐 제작으로 합류하게
+                            되면서 뜯어진 운동화와 슬리퍼, 늘어진 반팔 티셔츠를
+                            필두로 운동이라고는 한 번도 해본 적 없는 특별한
+                            선수들이 국가대표로 선발된다. 택견인지 축구인지
+                            헷갈리는 실력과 발보다 말이 앞서는 홈리스 선수들의
+                            환장할 팀워크, 다큐에 대사와 상황 그리고 진정성 없는
+                            연출을 강요하는 소민에 기가 막히는 감독 홍대. 하지만
+                            포기할 틈도 없이, 월드컵 출전일은 코앞으로
+                            다가오는데...
+                          </p>
+                          <div class="comment-genres">
+                            <span class="comment-genre"
+                              ><a href="/genre/18">드라마</a></span
+                            >
+                            <span class="comment-genre"
+                              ><a href="/genre/35">코미디</a></span
+                            >
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="comedySwiper-button-next swiper-button-next"></div>
+              <div class="comedySwiper-button-prev swiper-button-prev"></div>
+              <div class="comedySwiper-pagination swiper-pagination"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div class="footer_wrapper">
+      <footer class="footer">
+        <img
+          width="100px"
+          src="{{url_for('static',filename='img/api_logo.svg')}}"
+          alt="themovie logo"
+        />
+        <p>2023 © 내일배움캠프 6기 7조. All rights reserved.</p>
+      </footer>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
       // 상수 //
       const params = {
@@ -841,36 +1134,125 @@
       };
       const list = document.getElementById("movie-list");
       const url = "https://api.themoviedb.org/3/search/movie";
-      const input = document.getElementById("input-form");
+      const inputForm = document.getElementById("input-form");
+      const inputTitle = document.getElementById("input-title");
 
       // 이벤트 //
 
       document
         .querySelector("#input-title")
         .addEventListener("input", async (e) => {
-          const results = await fetchMoviesData(e);
+          const results = await fetchMoviesData(e.target.value);
           setMovieList(results);
         });
 
       window.onload = (event) => {
-        document.getElementById("input-title").focus();
+        inputTitle.focus();
+        //스와이퍼//
+        let recentSwiper = new Swiper(".recentSwiper", {
+          slidesPerView: 1,
+          centeredSlides: true,
+          spaceBetween: 10,
+          loop: true,
+          pagination: {
+            el: ".recentSwiper-pagination",
+            clickable: true,
+          },
+          navigation: {
+            nextEl: ".recentSwiper-button-next",
+            prevEl: ".recentSwiper-button-prev",
+          },
+          breakpoints: {
+            600: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            800: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1100: {
+              slidesPerView: 4,
+              spaceBetween: 10,
+            },
+          },
+        });
+        let actionSwiper = new Swiper(".actionSwiper", {
+          slidesPerView: 1,
+          centeredSlides: true,
+          spaceBetween: 10,
+          loop: true,
+          pagination: {
+            el: ".actionSwiper-pagination",
+            clickable: true,
+          },
+          navigation: {
+            nextEl: ".actionSwiper-button-next",
+            prevEl: ".actionSwiper-button-prev",
+          },
+          breakpoints: {
+            600: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            800: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1100: {
+              slidesPerView: 4,
+              spaceBetween: 10,
+            },
+          },
+        });
+        let comedySwiper = new Swiper(".comedySwiper", {
+          slidesPerView: 1,
+          centeredSlides: true,
+          spaceBetween: 10,
+          loop: true,
+          pagination: {
+            el: ".comedySwiper-pagination",
+            clickable: true,
+          },
+          navigation: {
+            nextEl: ".comedySwiper-button-next",
+            prevEl: ".comedySwiper-button-prev",
+          },
+          breakpoints: {
+            600: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            800: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1100: {
+              slidesPerView: 4,
+              spaceBetween: 10,
+            },
+          },
+        });
+        listing(recentSwiper, 10);
       };
 
-      input.addEventListener("input", function (e) {
+      inputForm.addEventListener("input", function (e) {
         if (e.target.value) {
           list.style.display = "block";
+          inputTitle.classList.add("oninput");
         } else {
           list.style.display = "none";
+          inputTitle.classList.remove("oninput");
         }
       });
 
-      input.addEventListener("focusin", function (e) {
+      inputForm.addEventListener("focusin", function (e) {
         if (e.target.value) {
           list.style.display = "block";
         }
       });
       document.addEventListener("click", function (e) {
-        if (hasFocus(input)) {
+        if (hasFocus(inputForm)) {
         } else {
           list.style.display = "none";
         }
@@ -918,8 +1300,8 @@
         content.appendChild(date);
         newItem.addEventListener("click", function handleClick(e) {
           console.log("클릭");
-          document.getElementById("input-title").value = movie.title;
-          document.getElementById("input-title").focus();
+          inputTitle.value = movie.title;
+          inputTitle.focus();
         });
         link.appendChild(content);
         newItem.appendChild(link);
@@ -935,10 +1317,10 @@
         }
       }
 
-      async function fetchMoviesData(e) {
+      async function fetchMoviesData(query) {
         const URLparams = new URLSearchParams({
           ...params,
-          query: e.target.value,
+          query: query,
         });
         try {
           const response = await fetch(url + "?" + URLparams);
@@ -949,38 +1331,77 @@
           console.log("fetch error: ", error);
         }
       }
+
+      async function fetchMovieData(id) {
+        const URLparams = new URLSearchParams({
+          api_key: params.api_key,
+          language: params.language,
+        });
+        try {
+          console.log("start");
+          const response = await fetch(
+            `https://api.themoviedb.org/3/movie/${id}` + "?" + URLparams
+          );
+          const json = await response.json();
+          return json;
+        } catch (error) {
+          console.log("fetch error: ", error);
+        }
+      }
+
+      function listing(swiper, length) {
+        fetch(`/api/recent/${length}`)
+          .then((res) => res.json())
+          .then((data) => {
+            data["result"].forEach((item) => {
+              const name = item.name;
+              const comment = item.comment;
+              const star = item.star;
+              const star_repeat = "⭐".repeat(star);
+              fetchMovieData(item.movie_id).then((movie) => {
+                const temp_html = `
+              <div class="swiper-slide">
+                      <li class="comment-item">
+                        <a href="/movie/502356">
+                          <img
+                            src="https://image.tmdb.org/t/p/w342${
+                              movie["poster_path"]
+                            }"
+                          />
+                        </a>
+                        <div class="comment-content">
+                          <a href="/movie/502356">
+                            <h5 class="comment-title">슈퍼 마리오 브라더스</h5>
+                          </a>
+                          <p class="comment-rating">${star_repeat}</p>
+                          <p class="comment-desc">
+                            ${comment}
+                          </p>
+                          <div class="comment-genres">
+                            ${movie.genres.map((genre) => {
+                              return `
+                              <span class="comment-genre">
+                                <a href="/genre/${genre.id}">${genre.name}</a>
+                              </span>`;
+                            })}
+                          </div>
+                        </div>
+                      </li>
+                </div>
+              `;
+                const slide = document.createElement("div");
+                slide.classList.add("swiper-slide");
+
+                slide.innerHTML = temp_html;
+                swiper.appendSlide(slide);
+              });
+            });
+          });
+      }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
     <script>
       // swiper //
-      var swiper = new Swiper(".mySwiper", {
-        slidesPerView: 1,
-        centeredSlides: true,
-        spaceBetween: 10,
-        loop: true,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-        breakpoints: {
-          600: {
-            slidesPerView: 2,
-            spaceBetween: 50,
-          },
-          800: {
-            slidesPerView: 3,
-            spaceBetween: 50,
-          },
-          1100: {
-            slidesPerView: 4,
-            spaceBetween: 60,
-          },
-        },
-      });
     </script>
   </body>
 </html>
