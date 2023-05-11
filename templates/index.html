@@ -1,3 +1,4 @@
+<!-- 동헌 -->
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -74,7 +75,7 @@
         max-height: 500px;
         overflow: hidden;
         overflow-y: auto;
-        border: 2px solid #d2d2d2;
+        border: 2px solid #1568ff;
         border-radius: 0 0 10px 10px;
         border-top: 0;
         margin: 0;
@@ -172,11 +173,18 @@
       .comment-item a img {
         width: 100%;
         height: auto;
+        object-fit: cover;
+        aspect-ratio: 2/3;
       }
 
       .comment-title {
         color: #202123;
         font-size: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
       }
       .comment-title:hover {
         text-decoration: underline;
@@ -215,6 +223,7 @@
       .comment-genres {
         margin-top: 10px;
         line-height: 1.5;
+        height: 51px;
       }
       .comment-genre {
         font-size: 13px;
@@ -725,7 +734,7 @@
       </div>
       <div class="comedy_wrapper">
         <div class="container">
-          <h2 class="main-title">액션 영화</h2>
+          <h2 class="main-title">코미디 영화</h2>
           <div class="swiper-section">
             <div class="movie-swiper">
               <div class="overflow-wrapper">
@@ -1371,7 +1380,7 @@
                         </a>
                         <div class="comment-content">
                           <a href="/movie/502356">
-                            <h5 class="comment-title">슈퍼 마리오 브라더스</h5>
+                            <h5 class="comment-title">${movie.title}</h5>
                           </a>
                           <p class="comment-rating">${star_repeat}</p>
                           <p class="comment-desc">

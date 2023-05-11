@@ -200,22 +200,31 @@
         }
       }
 
-      window.onload = function () {
+      window.onload = async function () {
         console.log("onload");
-        fetchData();
+        this.movie = await fetchData();
         listing();
       };
 
       function posting() {
-        let name = document.querySelector("#name").value;
-        let comment = document.querySelector("#comment").value;
-        let star = document.querySelector("#star").value;
+        const name = document.querySelector("#name").value;
+        const comment = document.querySelector("#comment").value;
+        const star = document.querySelector("#star").value;
+        const movieTitle = movie.title;
+        const moviePoster = movie.poster_path;
+        const movieGenres = movie.genres;
 
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append("name", name);
         formData.append("comment", comment);
         formData.append("star", star);
         formData.append("movie_id", "{{id}}");
+        formData.append("movie_title", movieTitle);
+        formData.append("movie_poster", moviePoster);
+        movieGenres.forEach((genre, index) => {
+          formData.append(`genres[${index}][id]`, genre.id);
+          formData.append(`genres[${index}][name]`, genre.name);
+        });
 
         fetch("/api/comment", { method: "POST", body: formData })
           .then((res) => res.json())

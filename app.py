@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, jsonify, json,url_for
 from pymongo import MongoClient
@@ -16,7 +17,10 @@ db = client['flask-movie-app']
 
 
 # movie genre list
-with open('./genre.json','rt',encoding='UTF8') as file:
+current_path = Path(__file__)
+file_name = "genre.json"
+file_path = current_path.with_name(file_name)
+with open(file_path,'rt',encoding='UTF8') as file:
     jsonData = json.load(file)['genres']
 
 genreList = {}
@@ -38,11 +42,26 @@ def create_comment():
     comment = request.form['comment']
     star = request.form['star']
     movie_id = request.form['movie_id']
+    movie_title = request.form['movie_title']
+    movie_poster = request.form['movie_poster']
+    movie_genres = []
+    index = 0
+    while True:
+        genre_id = request.form.get(f'genres[{index}][id]')
+        genre_name = request.form.get(f'genres[{index}][name]')
+        if genre_id is None or genre_name is None:
+            break
+        movie_genres.append({'id': genre_id, 'name': genre_name})
+        index += 1
+    print(movie_genres)
     doc = {
         'name': name,
         'comment': comment,
         'star': star,
-        'movie_id' : movie_id
+        'movie_id' : movie_id,
+        'movie_title': movie_title,
+        'movie_poster': movie_poster,
+        'movie_genres' : movie_genres
     }
     result =  db['comment'].insert_one(doc)
     print(result)
@@ -59,6 +78,12 @@ def get_comments(id):
 @app.route("/api/recent/<int:limit>", methods=["GET"])
 def get_recent_comments(limit):
     all_comments = list(db.comment.find({}, {'_id': False}))
+    return jsonify({'result': all_comments})
+
+## get recently comment list
+@app.route("/api/genre/<int:genre>", methods=["GET"])
+def get_genre_comments(genre):
+    all_comments = list(db.comment.find({'movie_genres.id':str(genre)}, {'_id': False}))
     return jsonify({'result': all_comments})
     
 
