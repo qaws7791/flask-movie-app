@@ -81,7 +81,7 @@ def create_comment():
 ## get comment list
 @app.route("/api/comment/<int:id>", methods=["GET"])
 def get_comments(id):
-    all_comments = list(db.comment.find({'movie_id':str(id)}, {'_id': False}))
+    all_comments = list(db.comment.find({'movie_id':str(id)}, {'_id': False}).sort("_id",-1))
 
     return jsonify({'result': all_comments})
 

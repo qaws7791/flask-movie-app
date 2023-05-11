@@ -189,7 +189,6 @@
           ...params,
         });
         try {
-          console.log("start");
           const response = await fetch(url + "?" + URLparams);
           const json = await response.json();
           console.log(json);
@@ -201,7 +200,6 @@
       }
 
       window.onload = async function () {
-        console.log("onload");
         this.movie = await fetchData();
         listing();
       };
@@ -229,7 +227,6 @@
         fetch("/api/comment", { method: "POST", body: formData })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             alert(data["msg"]);
             listing();
           });
