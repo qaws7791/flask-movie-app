@@ -10,7 +10,6 @@ app = Flask(__name__)
 # mongodb
 load_dotenv()
 MONGODB_URI = os.getenv("MONGODB_URI")
-print(MONGODB_URI)
 client = MongoClient(MONGODB_URI)
 print(client)
 db = client['flask-movie-app']
@@ -26,25 +25,27 @@ with open(file_path,'rt',encoding='UTF8') as file:
 genreList = {}
 for genre in jsonData:
     genreList[genre['id']] = genre['name']
-print(genreList)
 
 ##### flask app #####
 
-## HOME
+## HOME page
 @app.route('/')
 def home():
     return render_template('index.html')
 
+## Movie page
 @app.route('/movie/<int:id>')
 def movie(id):
     return render_template('comment.html',id=id)
     
+## Genre page
 @app.route('/genre/<int:id>')
 def genre(id):
     if id in genreList:
         return render_template('genre.html',id=id)
     else:
         return redirect(url_for('home'))
+
 ##### api #####
 ## create comment
 @app.route("/api/comment", methods=["POST"])
@@ -64,7 +65,6 @@ def create_comment():
             break
         movie_genres.append({'id': genre_id, 'name': genre_name})
         index += 1
-    print(movie_genres)
     doc = {
         'name': name,
         'comment': comment,
@@ -75,14 +75,13 @@ def create_comment():
         'movie_genres' : movie_genres
     }
     result =  db['comment'].insert_one(doc)
-    print(result)
     return jsonify({'msg': '저장 완료!'})
 
 ## get comment list
-@app.route("/api/comment/<int:id>", methods=["GET"])
-def get_comments(id):
-    all_comments = list(db.comment.find({'movie_id':str(id)}, {'_id': False}).sort("_id",-1))
-
+@app.route("/api/comment", methods=["GET"])
+def get_comments():
+    movieId = request.args.get('movieId')
+    all_comments = list(db.comment.find({'movie_id':str(movieId)}, {'_id': False}).sort("_id",-1))
     return jsonify({'result': all_comments})
 
 ## get recently comment list
@@ -100,9 +99,5 @@ def get_genre_comments(genre):
     else:
         return jsonify({'result': []})
     
-
-
-
-
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5050, debug=True)
