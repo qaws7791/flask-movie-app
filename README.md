@@ -1,27 +1,22 @@
-##Start Code
-python -m venv venv
-pip install flask pymongo
+## Start Code
 
-## hosting dashboard
+pip install flask pymongo python-dotenv
 
-https://www.pythonanywhere.com/user/qaws7791/
+## Site Map
 
-## hosting site
+|                            |                                        |      |
+| -------------------------- | -------------------------------------- | ---- |
+| /                          | 메인 페이지                            |      |
+| /movie/[id]                | 코멘트 페이지                          |      |
+| /api/comment/?movieid=[id] | 코멘트 생성, 특정 영화 코멘트 가져오기 |      |
+| /api/recent/[limit]        | 최근 코멘트 가져오기                   |      |
+| /api/genre/[genre]         | 특정 장르 코멘트 가져오기              |      |
 
-http://qaws7791.pythonanywhere.com/
+
 
 ## API
 
-|                |                                                           |
+| api            | page                                                      |
 | -------------- | --------------------------------------------------------- |
 | 영화 검색      | https://developers.themoviedb.org/3/search/search-movies  |
 | 영화 장르 목록 | https://developers.themoviedb.org/3/genres/get-movie-list |
-|                |                                                           |
-|                |                                                           |
-
-## PythonAnywhere
-
-- Venv: https://help.pythonanywhere.com/pages/Virtualenvs/
-- Flask: https://help.pythonanywhere.com/pages/Flask/
-- MongoDB:https://help.pythonanywhere.com/pages/MongoDB/
-- https://help.pythonanywhere.com/pages/environment-variables-for-web-apps
